@@ -89,9 +89,9 @@ You must never do the following:
 
 ```java
 void setServerPort(String value) {
-    try {
-        serverPort = Integer.parseInt(value);
-    } catch (NumberFormatException e) { }
+  try {
+    serverPort = Integer.parseInt(value);
+  } catch (NumberFormatException e) { }
 }
 ```
 
@@ -105,12 +105,12 @@ You should not do this:
 
 ```java
 try {
-    someComplicatedIOFunction();        // may throw IOException
-    someComplicatedParsingFunction();   // may throw ParsingException
-    someComplicatedSecurityFunction();  // may throw SecurityException
-    // phew, made it all the way
+  someComplicatedIOFunction();        // may throw IOException
+  someComplicatedParsingFunction();   // may throw ParsingException
+  someComplicatedSecurityFunction();  // may throw SecurityException
+  // phew, made it all the way
 } catch (Exception e) {                 // I'll just catch all exceptions
-    handleError();                      // with one generic handler!
+  handleError();                      // with one generic handler!
 }
 ```
 
@@ -135,21 +135,22 @@ See more info [here](https://source.android.com/source/code-style.html#fully-qua
 
 Fields should be defined at the __top of the file__ and they should follow the naming rules listed below.
 
-* Private, non-static field names start with __m__.
-* Private, static field names start with __s__.
-* Other fields start with a lower case letter.
+* <del>Private, non-static field names start with __m__.</del>
+* <del>Private, static field names start with __s__.</del>
+* Do not use __m__ or __s__ prefix for field names.
+* <del>Other</del> fields start with a lower case letter.
 * Static final fields (constants) are ALL_CAPS_WITH_UNDERSCORES.
 
 Example:
 
 ```java
 public class MyClass {
-    public static final int SOME_CONSTANT = 42;
-    public int publicField;
-    private static MyClass sSingleton;
-    int mPackagePrivate;
-    private int mPrivate;
-    protected int mProtected;
+  public static final int SOME_CONSTANT = 42;
+  public int publicField;
+  private static MyClass singleton;
+  int packagePrivate;
+  private int privateInt;
+  protected int protectedInt;
 }
 ```
 
@@ -164,19 +165,19 @@ public class MyClass {
 
 ### 2.2.4 Use spaces for indentation
 
-Use __4 space__ indents for blocks:
+Use __2 space__ indents for blocks:
 
 ```java
 if (x == 1) {
-    x++;
+  x++;
 }
 ```
 
-Use __8 space__ indents for line wraps:
+Use __4 space__ indents for line wraps:
 
 ```java
 Instrument i =
-        someLongExpression(that, wouldNotFit, on, one, line);
+    someLongExpression(that, wouldNotFit, on, one, line);
 ```
 
 ### 2.2.5 Use standard brace style
@@ -185,31 +186,34 @@ Braces go on the same line as the code before them.
 
 ```java
 class MyClass {
-    int func() {
-        if (something) {
-            // ...
-        } else if (somethingElse) {
-            // ...
-        } else {
-            // ...
-        }
+  int func() {
+    if (something) {
+      // ...
+    } else if (somethingElse) {
+      // ...
+    } else {
+      // ...
     }
+  }
 }
 ```
 
 Braces around the statements are required unless the condition and the body fit on one line.
 
-If the condition and the body fit on one line and that line is shorter than the max line length, then braces are not required, e.g.
-
-```java
-if (condition) body();
-```
+<del>If the condition and the body fit on one line and that line is shorter than the max line length, then braces are not required, e.g.</del>
+Braces are always required.
 
 This is __bad__:
 
 ```java
+if (condition) body();  // Bad!
+```
+
+This is also __bad__:
+
+```java
 if (condition)
-    body();  // bad!
+  body();  // Bad!
 ```
 
 ### 2.2.6 Annotations
@@ -239,10 +243,13 @@ public class MyAnnotatedClass { }
 
 __Fields__
 
-Annotations applying to fields should be listed __on the same line__, unless the line reaches the maximum line length.
+<del>Annotations applying to fields should be listed __on the same line__, unless the line reaches the maximum line length.</del>
+Annotations applying to fields are also listed after the documentation block and should appear as __one annotation per line__ .
 
 ```java
-@Nullable @Mock DataManager mDataManager;
+@Nullable
+@Mock
+DataManager mDataManager;
 ```
 
 ### 2.2.7 Limit variable scope
@@ -283,11 +290,11 @@ As a general rule, we use the class name as tag and we define it as a `static fi
 
 ```java
 public class MyClass {
-    private static final String TAG = MyClass.class.getSimpleName();
+  private static final String TAG = MyClass.class.getSimpleName();
 
-    public myMethod() {
-        Log.e(TAG, "My error message");
-    }
+  public myMethod() {
+    Log.e(TAG, "My error message");
+  }
 }
 ```
 
@@ -296,7 +303,9 @@ VERBOSE and DEBUG logs __must__ be disabled on release builds. It is also recomm
 To only show logs on debug builds:
 
 ```java
-if (BuildConfig.DEBUG) Log.d(TAG, "The value of x is " + x);
+if (BuildConfig.DEBUG) {
+  Log.d(TAG, "The value of x is " + x);
+}
 ```
 
 ### 2.2.10 Class member ordering
@@ -304,38 +313,42 @@ if (BuildConfig.DEBUG) Log.d(TAG, "The value of x is " + x);
 There is no single correct solution for this but using a __logical__ and __consistent__ order will improve code learnability and readability. It is recommendable to use the following order:
 
 1. Constants
-2. Fields
-3. Constructors
-4. Override methods and callbacks (public or private)
-5. Public methods
-6. Private methods
-7. Inner classes or interfaces
+2. Interfaces
+3. Fields
+4. Constructors
+5. Override methods and callbacks (public or private)
+6. Public methods
+7. Private methods
+8. Inner classes
 
 Example:
 
 ```java
 public class MainActivity extends Activity {
 
-	private String mTitle;
-    private TextView mTextViewTitle;
+  public interface MainActivityListener {
 
-    public void setTitle(String title) {
-    	mTitle = title;
-    }
+  }
 
-    @Override
-    public void onCreate() {
-        ...
-    }
+  private String title;
+  private TextView textViewTitle;
 
-    private void setUpView() {
-        ...
-    }
+  public void setTitle(String title) {
+    mTitle = title;
+  }
 
-    static class AnInnerClass {
+  @Override
+  public void onCreate() {
+    ...
+  }
 
-    }
+  private void setUpView() {
+    ...
+  }
+  
+  static class AnInnerClass {
 
+  }
 }
 ```
 
@@ -344,19 +357,22 @@ If your class is extending an __Android component__ such as an Activity or a Fra
 ```java
 public class MainActivity extends Activity {
 
-	//Order matches Activity lifecycle
-    @Override
-    public void onCreate() {}
+  // Order matches Activity lifecycle
+  @Override
+  public void onCreate() {
+  }
 
-    @Override
-    public void onResume() {}
+  @Override
+  public void onResume() {
+  }
 
-    @Override
-    public void onPause() {}
+  @Override
+  public void onPause() {
+  }
 
-    @Override
-    public void onDestroy() {}
-
+  @Override
+  public void onDestroy() {
+  }
 }
 ```
 
@@ -425,11 +441,11 @@ For Fragments it is named `newInstance()` and handles the creation of the Fragme
 
 ```java
 public static UserFragment newInstance(User user) {
-	UserFragment fragment = new UserFragment;
-	Bundle args = new Bundle();
-	args.putParcelable(ARGUMENT_USER, user);
-	fragment.setArguments(args)
-	return fragment;
+  UserFragment fragment = new UserFragment;
+  Bundle args = new Bundle();
+  args.putParcelable(ARGUMENT_USER, user);
+  fragment.setArguments(args)
+  return fragment;
 }
 ```
 
@@ -459,7 +475,7 @@ When the line is broken at an operator, the break comes __before__ the operator.
 
 ```java
 int longName = anotherVeryLongVariable + anEvenLongerOne - thisRidiculousLongOne
-        + theFinalOne;
+    + theFinalOne;
 ```
 
 __Assignment Operator Exception__
@@ -468,7 +484,7 @@ An exception to the `break at operators` rule is the assignment operator `=`, wh
 
 ```java
 int longName =
-        anotherVeryLongVariable + anEvenLongerOne - thisRidiculousLongOne + theFinalOne;
+    anotherVeryLongVariable + anEvenLongerOne - thisRidiculousLongOne + theFinalOne;
 ```
 
 __Method chain case__
@@ -481,8 +497,8 @@ Picasso.with(context).load("http://ribot.co.uk/images/sexyjoe.jpg").into(imageVi
 
 ```java
 Picasso.with(context)
-        .load("http://ribot.co.uk/images/sexyjoe.jpg")
-        .into(imageView);
+    .load("http://ribot.co.uk/images/sexyjoe.jpg")
+    .into(imageView);
 ```
 
 __Long parameters case__
@@ -495,10 +511,10 @@ loadPicture(context, "http://ribot.co.uk/images/sexyjoe.jpg", mImageViewProfileP
 
 ```java
 loadPicture(context,
-        "http://ribot.co.uk/images/sexyjoe.jpg",
-        mImageViewProfilePicture,
-        clickListener,
-        "Title of the picture");
+    "http://ribot.co.uk/images/sexyjoe.jpg",
+    mImageViewProfilePicture,
+    clickListener,
+    "Title of the picture");
 ```
 
 ### 2.2.16 RxJava chains styling
@@ -507,19 +523,19 @@ Rx chains of operators require line-wrapping. Every operator must go in a new li
 
 ```java
 public Observable<Location> syncLocations() {
-    return mDatabaseHelper.getAllLocations()
-            .concatMap(new Func1<Location, Observable<? extends Location>>() {
-                @Override
-                 public Observable<? extends Location> call(Location location) {
-                     return mRetrofitService.getLocation(location.id);
-                 }
-            })
-            .retry(new Func2<Integer, Throwable, Boolean>() {
-                 @Override
-                 public Boolean call(Integer numRetries, Throwable throwable) {
-                     return throwable instanceof RetrofitError;
-                 }
-            });
+  return databaseHelper.getAllLocations()
+      .concatMap(new Func1<Location, Observable<? extends Location>>() {
+        @Override
+        public Observable<? extends Location> call(Location location) {
+          return retrofitService.getLocation(location.id);
+        }
+      })
+      .retry(new Func2<Integer, Throwable, Boolean>() {
+        @Override
+        public Boolean call(Integer numRetries, Throwable throwable) {
+          return throwable instanceof RetrofitError;
+        }
+      });
 }
 ```
 
@@ -533,9 +549,9 @@ This is good:
 
 ```xml
 <TextView
-	android:id="@+id/text_view_profile"
-	android:layout_width="wrap_content"
-	android:layout_height="wrap_content" />
+  android:id="@+id/text_view_profile"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" />
 ```
 
 This is __bad__ :
@@ -543,9 +559,9 @@ This is __bad__ :
 ```xml
 <!-- Don\'t do this! -->
 <TextView
-    android:id="@+id/text_view_profile"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" >
+  android:id="@+id/text_view_profile"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" >
 </TextView>
 ```
 
@@ -570,9 +586,9 @@ Image view example:
 
 ```xml
 <ImageView
-    android:id="@+id/image_profile"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
+  android:id="@+id/image_profile"
+  android:layout_width="wrap_content"
+  android:layout_height="wrap_content" />
 ```
 
 Menu example:
@@ -580,8 +596,8 @@ Menu example:
 ```xml
 <menu>
 	<item
-        android:id="@+id/menu_done"
-        android:title="Done" />
+    android:id="@+id/menu_done"
+    android:title="Done" />
 </menu>
 ```
 
@@ -636,8 +652,8 @@ When using the Espresso API it is a common practice to place chained methods in 
 
 ```java
 onView(withId(R.id.view))
-        .perform(scrollTo())
-        .check(matches(isDisplayed()))
+    .perform(scrollTo())
+    .check(matches(isDisplayed()))
 ```
 
 # License

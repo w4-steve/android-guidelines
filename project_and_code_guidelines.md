@@ -431,9 +431,9 @@ In the case of Activities the method is usually called `getStartIntent()`:
 
 ```java
 public static Intent getStartIntent(Context context, User user) {
-	Intent intent = new Intent(context, ThisActivity.class);
-	intent.putParcelableExtra(EXTRA_USER, user);
-	return intent;
+  Intent intent = new Intent(context, ThisActivity.class);
+  intent.putParcelableExtra(EXTRA_USER, user);
+  return intent;
 }
 ```
 

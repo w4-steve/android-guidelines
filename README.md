@@ -5,6 +5,12 @@ List of guidelines that we use at [ribot](http://ribot.co.uk) when developing fo
 * [Project and code style guidelines](project_and_code_guidelines.md)
 * [Architecture Guidelines](architecture_guidelines/android_architecture.md)
 
+We have some policies when developing for the __Android__ platform.
+
+1. Do not use other JVM based languages like Kotlin, Groovy, or Scala, etc.
+2. Do not use additional JVM based frameworks like RxJava.
+3. Add additional annotations if required, but minimize it.
+
 ### License
 
 ```
